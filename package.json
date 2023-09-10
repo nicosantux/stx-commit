@@ -1,0 +1,48 @@
+{
+  "name": "stx-commit",
+  "version": "0.0.0",
+  "description": "CLI to help write commit messages according to conventional commits.",
+  "type": "module",
+  "main": "./build/src/index.js",
+  "bin": {
+    "stx-commit": "./build/src/index.js"
+  },
+  "keywords": [
+    "CLI",
+    "commits",
+    "conventional-commits"
+  ],
+  "author": {
+    "name": "Nicolás Santuccio",
+    "email": "nico.santuccio@gmail.com"
+  },
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "commitlint": "commitlint --edit",
+    "dev": "tsc -w",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "link-cli": "pnpm uninstall --global stx-commit || true && pnpm link --global",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix --ext .tsx,.ts,.jsx,.js,.cjs,.mjs",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "17.7.1",
+    "@commitlint/config-conventional": "17.7.0",
+    "@types/node": "20.6.0",
+    "@typescript-eslint/eslint-plugin": "6.6.0",
+    "@typescript-eslint/parser": "6.6.0",
+    "eslint": "8.49.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-import": "2.28.1",
+    "husky": "8.0.3",
+    "prettier": "3.0.3",
+    "typescript": "5.2.2"
+  }
+}
