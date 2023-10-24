@@ -1,2 +1,5 @@
 export * from './exec-cmd.util.js'
+export * from './git-error.util.js'
+export * from './git.util.js'
 export * from './handle-cancel-prompt.util.js'
+export * from './wrap-text.util.js'
