@@ -7,24 +7,24 @@ import color from 'picocolors'
 
 import { MENU_OPTIONS } from './constants/index.js'
 import {
+  buildCommit,
+  getCommitBodyMessage,
+  getCommitFooter,
+  getCommitScope,
+  getCommitTitle,
+  getCommitType,
+  getIsBreakingChange,
+  showConfirmCommit,
+  showFilesStatus,
+  showFilesToAdd,
+  showFilesToRestore,
+} from './lib/index.js'
+import {
   NotInGitRepositoryError,
   createCommit,
   getStatusFiles,
   handleCancelPrompt,
 } from './utils/index.js'
-import {
-  showFilesToRestore,
-  showFilesStatus,
-  showFilesToAdd,
-  getCommitType,
-  getCommitScope,
-  getCommitTitle,
-  getCommitBodyMessage,
-  getCommitFooter,
-  getIsBreakingChange,
-  buildCommit,
-  showConfirmCommit,
-} from './lib/index.js'
 
 intro(color.white(' Welcome to Santux Commit '))
 
