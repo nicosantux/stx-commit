@@ -132,12 +132,13 @@ export function buildCommit({
   isBreakingChange: boolean
   scope: string | null
 }) {
-  return `${commitType}${scope ? `(${scope})` : ''}${isBreakingChange ? '!:' : ':'} ${commitTitle}
-
-${bodyMessage ? bodyMessage : ''}
-
-${commitFooter ? commitFooter : ''}
-`.trim()
+  return [
+    `${commitType}${scope ? `(${scope})` : ''}${isBreakingChange ? '!:' : ':'} ${commitTitle}`,
+    `${bodyMessage ? bodyMessage : ''}`,
+    `${commitFooter ? commitFooter : ''}`,
+  ]
+    .filter(Boolean)
+    .join('\n\n')
 }
 
 export async function showConfirmCommit(commit: string) {
