@@ -79,7 +79,7 @@ export async function getStagedFiles() {
       return arr
     }, [])
   } catch (_) {
-    outro('An error occurred restoring the files. Please try again.')
+    outro('An error occurred getting the files. Please try again.')
     process.exit(1)
   }
 }
