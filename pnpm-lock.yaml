@@ -8,6 +8,12 @@ dependencies:
   '@clack/prompts':
     specifier: 0.7.0
     version: 0.7.0
+  '@commander-js/extra-typings':
+    specifier: 11.1.0
+    version: 11.1.0(commander@11.1.0)
+  commander:
+    specifier: 11.1.0
+    version: 11.1.0
   picocolors:
     specifier: 1.0.0
     version: 1.0.0
@@ -92,6 +98,14 @@ packages:
     dev: false
     bundledDependencies:
       - is-unicode-supported
+
+  /@commander-js/extra-typings@11.1.0(commander@11.1.0):
+    resolution: {integrity: sha512-GuvZ38d23H+7Tz2C9DhzCepivsOsky03s5NI+KCy7ke1FNUvsJ2oO47scQ9YaGGhgjgNW5OYYNSADmbjcSoIhw==}
+    peerDependencies:
+      commander: 11.1.x
+    dependencies:
+      commander: 11.1.0
+    dev: false
 
   /@commitlint/cli@18.4.3(typescript@5.3.3):
     resolution: {integrity: sha512-zop98yfB3A6NveYAZ3P1Mb6bIXuCeWgnUfVNkH4yhIMQpQfzFwseadazOuSn0OOfTt0lWuFauehpm9GcqM5lww==}
@@ -744,6 +758,11 @@ packages:
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
+
+  /commander@11.1.0:
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
+    engines: {node: '>=16'}
+    dev: false
 
   /compare-func@2.0.0:
     resolution: {integrity: sha512-zHig5N+tPWARooBnb0Zx1MFcdfpyJrfTJ3Y5L+IFvUm8rM74hHz66z0gw0x4tijh5CorKkKUCnW82R2vmpeCRA==}
