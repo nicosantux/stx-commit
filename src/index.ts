@@ -2,11 +2,12 @@
 
 import type { Action, GitStatus, Option } from './types/index.js'
 
+import { resolve } from 'node:path'
+import { readFile } from 'node:fs/promises'
+
 import { intro, outro, select } from '@clack/prompts'
 import { Command } from '@commander-js/extra-typings'
 import color from 'picocolors'
-
-import pkgJson from '../package.json' with { type: 'json' }
 
 import { DEFAULT_MAX_LENGTH, MENU_OPTIONS } from './constants/index.js'
 import {
@@ -28,6 +29,8 @@ import {
   getStatusFiles,
   handleCancelPrompt,
 } from './utils/index.js'
+
+const pkgJson = JSON.parse(await readFile(resolve(process.cwd(), 'package.json'), 'utf8'))
 
 const program = new Command('stx-commit')
   .description('CLI to help write commit messages according to conventional commits.')
