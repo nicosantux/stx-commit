@@ -26,7 +26,7 @@ export async function getCommitScope() {
     }),
   )
 
-  if (!addScope) return null
+  if (!addScope) return
 
   return handleCancelPrompt(
     await text({
@@ -41,24 +41,26 @@ export async function getCommitScope() {
 
 export async function getCommitTitle({
   commitType,
+  maxLength,
   scope,
 }: {
-  commitType: string
-  scope: string | null
+  commitType: CommitType
+  maxLength: number
+  scope?: string
 }) {
   return handleCancelPrompt(
     await text({
       message: 'Enter your commit title:',
       validate: (value) => {
         if (!value.trim().length) return 'Title cannot be empty.'
-        if (value.trim().length + commitType.length + (scope?.length ?? 0) > 72)
+        if (value.trim().length + commitType.length + (scope?.length ?? 0) > maxLength)
           return 'Title too long. Consider add a body message.'
       },
     }),
   ).trim()
 }
 
-export async function getCommitBodyMessage() {
+export async function getCommitBodyMessage({ maxLength }: { maxLength: number }) {
   const addBodyMessage = handleCancelPrompt(
     await confirm({
       initialValue: false,
@@ -66,7 +68,7 @@ export async function getCommitBodyMessage() {
     }),
   )
 
-  if (!addBodyMessage) return null
+  if (!addBodyMessage) return
 
   const bodyMessage = handleCancelPrompt(
     await text({
@@ -80,10 +82,10 @@ export async function getCommitBodyMessage() {
     .trim()
     .replaceAll('\\n', '\n')
 
-  return wrapText(bodyMessage)
+  return wrapText(bodyMessage, maxLength)
 }
 
-export async function getCommitFooter() {
+export async function getCommitFooter({ maxLength }: { maxLength: number }) {
   const addFooter = handleCancelPrompt(
     await confirm({
       initialValue: false,
@@ -91,7 +93,7 @@ export async function getCommitFooter() {
     }),
   )
 
-  if (!addFooter) return null
+  if (!addFooter) return
 
   const footer = handleCancelPrompt(
     await text({
@@ -105,7 +107,7 @@ export async function getCommitFooter() {
     .trim()
     .replaceAll('\\n', '\n')
 
-  return wrapText(footer)
+  return wrapText(footer, maxLength)
 }
 
 export async function getIsBreakingChange() {
@@ -124,16 +126,22 @@ export function buildCommit({
   commitType,
   isBreakingChange,
   scope,
+  withEmoji,
 }: {
-  bodyMessage: string | null
-  commitFooter: string | null
+  bodyMessage?: string
+  commitFooter?: string
   commitTitle: string
   commitType: CommitType
   isBreakingChange: boolean
-  scope: string | null
+  scope?: string
+  withEmoji: boolean
 }) {
+  const emojiFormat = withEmoji ? `${COMMIT_TYPES[commitType].emoji} ` : ''
+  const scopeFormat = scope ? `(${scope})` : ''
+  const breakingChangeFormat = isBreakingChange ? '!:' : ':'
+
   return [
-    `${commitType}${scope ? `(${scope})` : ''}${isBreakingChange ? '!:' : ':'} ${commitTitle}`,
+    `${emojiFormat}${commitType}${scopeFormat}${breakingChangeFormat} ${commitTitle}`,
     `${bodyMessage ? bodyMessage : ''}`,
     `${commitFooter ? commitFooter : ''}`,
   ]
@@ -141,18 +149,25 @@ export function buildCommit({
     .join('\n\n')
 }
 
-export async function showConfirmCommit(commit: string) {
+export async function showConfirmCommit({
+  commit,
+  maxLength,
+}: {
+  commit: string
+  maxLength: number
+}) {
   const lines = commit.split('\n')
+  const boxPadding = maxLength + 3
 
   console.log(color.gray('│'))
   console.log(`${color.gray('│')} This will be your commit:`)
-  console.log(color.gray('│ ') + '╭'.padEnd(78, '─') + '╮')
-  console.log(color.gray('│ ') + '│'.padEnd(78, ' ') + '│')
+  console.log(color.gray('│ ') + '╭'.padEnd(boxPadding, '─') + '╮')
+  console.log(color.gray('│ ') + '│'.padEnd(boxPadding, ' ') + '│')
   lines.forEach((line) => {
-    console.log(color.gray('│ ') + `│ ${line}`.padEnd(78, ' ') + '│')
+    console.log(color.gray('│ ') + `│ ${line}`.padEnd(boxPadding, ' ') + '│')
   })
-  console.log(color.gray('│ ') + '│'.padEnd(78, ' ') + '│')
-  console.log(color.gray('│ ') + '╰'.padEnd(78, '─') + '╯')
+  console.log(color.gray('│ ') + '│'.padEnd(boxPadding, ' ') + '│')
+  console.log(color.gray('│ ') + '╰'.padEnd(boxPadding, '─') + '╯')
 
   return handleCancelPrompt(
     await confirm({
