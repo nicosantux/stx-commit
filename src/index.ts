@@ -3,9 +3,12 @@
 import type { Action, GitStatus, Option } from './types/index.js'
 
 import { intro, outro, select } from '@clack/prompts'
+import { Command } from '@commander-js/extra-typings'
 import color from 'picocolors'
 
-import { MENU_OPTIONS } from './constants/index.js'
+import pkgJson from '../package.json' with { type: 'json' }
+
+import { DEFAULT_MAX_LENGTH, MENU_OPTIONS } from './constants/index.js'
 import {
   buildCommit,
   getCommitBodyMessage,
@@ -26,11 +29,21 @@ import {
   handleCancelPrompt,
 } from './utils/index.js'
 
-intro(color.white(' Welcome to Santux Commit '))
+const program = new Command('stx-commit')
+  .description('CLI to help write commit messages according to conventional commits.')
+  .version(pkgJson.version)
+  .option('-ml, --max-length <VALUE>', 'max length of each line', Number, DEFAULT_MAX_LENGTH)
+  .option('-e, --emoji', 'add emojis to the commit', false)
+
+program.parse(process.argv)
+
+const options = program.opts()
 
 let status: GitStatus = { staged: [], notStaged: [], untracked: [] }
 
 let action: Action
+
+intro(color.white(' Welcome to Santux Commit '))
 
 do {
   try {
@@ -81,15 +94,17 @@ if (action === 'quit') {
   process.exit(0)
 }
 
+console.log({ status })
+
 const commitType = await getCommitType()
 
 const scope = await getCommitScope()
 
-const commitTitle = await getCommitTitle({ commitType, scope })
+const commitTitle = await getCommitTitle({ commitType, scope, maxLength: options.maxLength })
 
-const bodyMessage = await getCommitBodyMessage()
+const bodyMessage = await getCommitBodyMessage({ maxLength: options.maxLength })
 
-const commitFooter = await getCommitFooter()
+const commitFooter = await getCommitFooter({ maxLength: options.maxLength })
 
 const isBreakingChange = await getIsBreakingChange()
 
@@ -100,9 +115,10 @@ const commit = buildCommit({
   commitType,
   isBreakingChange,
   scope,
+  withEmoji: options.emoji,
 })
 
-const isCommitConfirmed = await showConfirmCommit(commit)
+const isCommitConfirmed = await showConfirmCommit({ commit, maxLength: options.maxLength })
 
 if (!isCommitConfirmed) {
   outro('Your commit has been canceled')
