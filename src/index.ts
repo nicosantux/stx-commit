@@ -2,9 +2,6 @@
 
 import type { Action, GitStatus, Option } from './types/index.js'
 
-import { resolve } from 'node:path'
-import { readFile } from 'node:fs/promises'
-
 import { intro, outro, select } from '@clack/prompts'
 import { Command } from '@commander-js/extra-typings'
 import color from 'picocolors'
@@ -30,11 +27,8 @@ import {
   handleCancelPrompt,
 } from './utils/index.js'
 
-const pkgJson = JSON.parse(await readFile(resolve(process.cwd(), 'package.json'), 'utf8'))
-
 const program = new Command('stx-commit')
   .description('CLI to help write commit messages according to conventional commits.')
-  .version(pkgJson.version)
   .option('-ml, --max-length <VALUE>', 'max length of each line', Number, DEFAULT_MAX_LENGTH)
   .option('-e, --emoji', 'add emojis to the commit', false)
 
@@ -96,8 +90,6 @@ if (action === 'quit') {
   outro('👋 Bye')
   process.exit(0)
 }
-
-console.log({ status })
 
 const commitType = await getCommitType()
 
