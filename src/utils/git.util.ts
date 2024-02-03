@@ -89,7 +89,17 @@ export async function addToStagingArea(files: string[]) {
 }
 
 export async function restoreFilesFromStaging(files: string[]) {
-  await execCmd(`git restore --staged ${files.join(' ')}`)
+  try {
+    await execCmd(`git restore --staged ${files.join(' ')}`)
+  } catch (error) {
+    const headErrorRegex = /fatal: could not resolve head/i
+
+    if (!headErrorRegex.test(error as string)) {
+      throw new Error(error as string)
+    }
+
+    await execCmd(`git rm --cached ${files.join(' ')}`)
+  }
 }
 
 export async function createCommit(commit: string) {
