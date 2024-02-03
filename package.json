@@ -1,6 +1,6 @@
 {
   "name": "stx-commit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI to help write commit messages according to conventional commits.",
   "type": "module",
   "main": "./build/src/index.js",
