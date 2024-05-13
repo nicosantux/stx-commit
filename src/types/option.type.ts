@@ -1,4 +1,4 @@
-export type Option<Value> = {
+export interface Option<Value> {
   hint?: string
   label: string
   value: Value

@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import type { GitStatus, Option } from '../types/index.js'
 
-import color from 'picocolors'
 import { multiselect } from '@clack/prompts'
+import color from 'picocolors'
 
 import {
   addToStagingArea,
@@ -37,7 +38,8 @@ export async function showFilesToAdd(files: string[]) {
   const fileToAdd = handleCancelPrompt(
     await multiselect<Option<string>[], string>({
       message: '',
-      options: files.map((file) => ({ label: file, value: file.split(' ').at(-1) as string })),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      options: files.map((file) => ({ label: file, value: file.split(' ').at(-1)! })),
     }),
   )
 
@@ -50,7 +52,8 @@ export async function showFilesToRestore() {
   const filesToRestore = handleCancelPrompt(
     await multiselect<Option<string>[], string>({
       message: '',
-      options: files.map((file) => ({ label: file, value: file.split(' ').at(-1) as string })),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      options: files.map((file) => ({ label: file, value: file.split(' ').at(-1)! })),
     }),
   )
 

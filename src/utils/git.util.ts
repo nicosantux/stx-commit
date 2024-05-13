@@ -39,6 +39,7 @@ function parseGitStatus(lines: string[]) {
   return lines.reduce<GitStatus>(
     (obj, line) => {
       const status = line.slice(0, 2)
+
       const [indexStatus, workTreeStatus] = status.split('').map((letter) => letter.trim()) as [
         GitFileStatus,
         GitFileStatus,
@@ -47,7 +48,7 @@ function parseGitStatus(lines: string[]) {
       const fileName = line.slice(2).trim()
 
       if (indexStatus === '?') {
-        obj.untracked.push(`${fileName}`)
+        obj.untracked.push(fileName)
       }
 
       if (indexStatus && indexStatus !== '?') {
@@ -73,7 +74,9 @@ export async function getStagedFiles() {
     return fileLines.reduce<string[]>((arr, line) => {
       const parts = line.split('\t')
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       if (parts[0]?.startsWith('R')) arr.push(parts[1]!, parts[2]!)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       else arr.push(parts[1]!)
 
       return arr

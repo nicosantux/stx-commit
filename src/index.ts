@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-await-in-loop */
 
 import type { Action, GitStatus, Option } from './types/index.js'
 
@@ -57,6 +58,7 @@ do {
   action = handleCancelPrompt(
     await select<Option<Partial<Action>>[], Action>({
       message: 'What do you want to do?',
+      // eslint-disable-next-line @typescript-eslint/no-loop-func
       options: MENU_OPTIONS.filter((option) => {
         if (option.value === 'add' && !status.notStaged.length && !status.untracked.length) {
           return false
