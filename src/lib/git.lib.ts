@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { CommitType, Option } from '../types/index.js'
 
 import { confirm, select, text } from '@clack/prompts'
@@ -142,8 +143,8 @@ export function buildCommit({
 
   return [
     `${emojiFormat}${commitType}${scopeFormat}${breakingChangeFormat} ${commitTitle}`,
-    `${bodyMessage ? bodyMessage : ''}`,
-    `${commitFooter ? commitFooter : ''}`,
+    bodyMessage ? bodyMessage : '',
+    commitFooter ? commitFooter : '',
   ]
     .filter(Boolean)
     .join('\n\n')
@@ -161,13 +162,13 @@ export async function showConfirmCommit({
 
   console.log(color.gray('│'))
   console.log(`${color.gray('│')} This will be your commit:`)
-  console.log(color.gray('│ ') + '╭'.padEnd(boxPadding, '─') + '╮')
-  console.log(color.gray('│ ') + '│'.padEnd(boxPadding, ' ') + '│')
+  console.log(`${color.gray('│ ') + '╭'.padEnd(boxPadding, '─')}╮`)
+  console.log(`${color.gray('│ ') + '│'.padEnd(boxPadding, ' ')}│`)
   lines.forEach((line) => {
-    console.log(color.gray('│ ') + `│ ${line}`.padEnd(boxPadding, ' ') + '│')
+    console.log(`${color.gray('│ ') + `│ ${line}`.padEnd(boxPadding, ' ')}│`)
   })
-  console.log(color.gray('│ ') + '│'.padEnd(boxPadding, ' ') + '│')
-  console.log(color.gray('│ ') + '╰'.padEnd(boxPadding, '─') + '╯')
+  console.log(`${color.gray('│ ') + '│'.padEnd(boxPadding, ' ')}│`)
+  console.log(`${color.gray('│ ') + '╰'.padEnd(boxPadding, '─')}╯`)
 
   return handleCancelPrompt(
     await confirm({
